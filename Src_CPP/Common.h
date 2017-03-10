@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <algorithm>
 #include <bitset>
+#include <iostream>
+#include <fstream>
 
 #include "Parameters.h"
 #include "Stopwatch.hpp"

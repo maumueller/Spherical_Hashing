@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 #include <stdio.h>  // for sprintf on some platforms
-#include "stopwatch.hpp"
+#include "Stopwatch.hpp"
 #include <iostream>
 
 using namespace std;
