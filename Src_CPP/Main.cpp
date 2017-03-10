@@ -37,7 +37,7 @@ void Initialize_Data()
 	nP = dps.nP;		nQ = qps.nP;
 
 	// you can control the number of queries here
-	nQ = 100;
+	// nQ = 100;
 
 	dataCenter = new REAL_TYPE[ dps.dim ];
 	// compute mean position of data points
