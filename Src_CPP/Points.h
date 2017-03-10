@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Common.h"
+#include <sstream>
+#include<string>
 
 class Points
 {
@@ -27,9 +29,15 @@ public :
 	// ...
 	void Initialize_From_File(char *fileName)
 	{
-		FILE *input = fopen( fileName , "rb" );
-		fread( &nP , sizeof(int) , 1 , input );
-		fread( &dim , sizeof(int) , 1 , input );
+        std::string s(fileName);
+        std::ifstream fs(s);
+        std::string line; 
+
+        getline(fs, line);
+        nP = std::stoi(line);
+        getline(fs, line);
+        dim = std::stoi(line);
+        std::cout << nP << " " << dim << std::endl;
 		d = new REAL_TYPE * [ nP ];
 		for(int i=0;i<nP;i++)
 		{
@@ -38,13 +46,16 @@ public :
 		float *tmp = new float [ dim ];
 		for(int i=0;i<nP;i++)
 		{
-			fread( tmp , sizeof(float) , dim , input );
+            getline(fs, line);
+            auto sstr = std::istringstream(line);
+            float x;
 			for(int k=0;k<dim;k++)
 			{
-				d[i][k] = (REAL_TYPE)( tmp[k] );
+                sstr >> x;
+
+				d[i][k] = (REAL_TYPE)( x );
 			}
 		}
-		fclose(input);
 		delete [] tmp;
 	}
 
