@@ -182,16 +182,6 @@ void Process()
 	T0.Stop();
 	printf("- Spherical Hashing: Computing Binary Codes Finished (%f seconds)\n",T0.GetTime() );
 
-    std::cout << "Data points: " << std::endl;
-    for (int i = 0; i < nP; i++) {
-        std::cout << bCodeData_SH[i] << std::endl;
-    }
-    std::cout << "Query Points: " << std::endl;
-    for (int i = 0; i < nQ; i++) {
-        std::cout << bCodeQuery_SH[i] << std::endl;
-    }
-
-
 	double mAP_LSH, mAP_LSH_JC, mAP_SH_HD, mAP_SH_SHD, mAP_SH_JC;
 	mAP_LSH = 0.0;		mAP_SH_HD = 0.0;		mAP_SH_SHD = 0.0; mAP_SH_JC = 0.0, mAP_LSH_JC = 0.0;
 	// process queries
