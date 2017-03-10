@@ -130,8 +130,10 @@ void Process()
 	bitset<BCODE_LEN> *bCodeQuery_SH = new bitset<BCODE_LEN> [ nQ ];
 
 	Result_Element<int> *resLSH = new Result_Element<int> [ nP ];
+	Result_Element<int> *resLSH_JC = new Result_Element<int> [ nP ];
 	Result_Element<int> *resSH_HD = new Result_Element<int> [ nP ];
 	Result_Element<double> *resSH_SHD = new Result_Element<double> [ nP ];
+	Result_Element<double> *resSH_JC = new Result_Element<double> [ nP ];
 	
 	Do_ZeroCentering();
 
@@ -176,11 +178,22 @@ void Process()
 	{
 		sh.Compute_BCode( qps.d[i] , bCodeQuery_SH[i] );
 	}
+
 	T0.Stop();
 	printf("- Spherical Hashing: Computing Binary Codes Finished (%f seconds)\n",T0.GetTime() );
 
-	double mAP_LSH, mAP_SH_HD, mAP_SH_SHD;
-	mAP_LSH = 0.0;		mAP_SH_HD = 0.0;		mAP_SH_SHD = 0.0;
+    std::cout << "Data points: " << std::endl;
+    for (int i = 0; i < nP; i++) {
+        std::cout << bCodeData_SH[i] << std::endl;
+    }
+    std::cout << "Query Points: " << std::endl;
+    for (int i = 0; i < nQ; i++) {
+        std::cout << bCodeQuery_SH[i] << std::endl;
+    }
+
+
+	double mAP_LSH, mAP_LSH_JC, mAP_SH_HD, mAP_SH_SHD, mAP_SH_JC;
+	mAP_LSH = 0.0;		mAP_SH_HD = 0.0;		mAP_SH_SHD = 0.0; mAP_SH_JC = 0.0, mAP_LSH_JC = 0.0;
 	// process queries
 	for(int qIndex=0;qIndex<nQ;qIndex++)
 	{
@@ -190,22 +203,30 @@ void Process()
 		for(int i=0;i<nP;i++)
 		{
 			resLSH[i].index    = i;		resLSH[i].dist    = Compute_HD(  bCodeQuery_LSH[qIndex] , bCodeData_LSH[i] );
+			resLSH_JC[i].index    = i;		resLSH_JC[i].dist    = Compute_JC(  bCodeQuery_LSH[qIndex] , bCodeData_LSH[i] );
 			resSH_HD[i].index  = i;		resSH_HD[i].dist  = Compute_HD(  bCodeQuery_SH[qIndex]  , bCodeData_SH[i]  );
 			resSH_SHD[i].index = i;		resSH_SHD[i].dist = Compute_SHD( bCodeQuery_SH[qIndex]  , bCodeData_SH[i]  );
+			resSH_JC[i].index = i;		resSH_JC[i].dist = Compute_JC( bCodeQuery_SH[qIndex]  , bCodeData_SH[i]  );
 		}
 		mAP_LSH += Compute_AP<int>( gt[qIndex] , resLSH , nP );
+		mAP_LSH_JC += Compute_AP<int>( gt[qIndex] , resLSH_JC , nP );
 		mAP_SH_HD += Compute_AP<int>( gt[qIndex] , resSH_HD , nP );
 		mAP_SH_SHD += Compute_AP<double>( gt[qIndex] , resSH_SHD , nP );
+		mAP_SH_JC += Compute_AP<double>( gt[qIndex] , resSH_JC , nP );
 	}
 	mAP_LSH    /= (double)(nQ);
+	mAP_LSH_JC    /= (double)(nQ);
 	mAP_SH_HD  /= (double)(nQ);
 	mAP_SH_SHD /= (double)(nQ);
+	mAP_SH_JC /= (double)(nQ);
 
 	printf("\n");
 	printf("-- mAP\n");
 	printf("\tLocality Sensitive Hashing : %f\n",mAP_LSH   );
+	printf("\tLocality Sensitive Hashing (JC) : %f\n",mAP_LSH_JC   );
 	printf("\t    Spherical Hashing (HD) : %f\n",mAP_SH_HD );
 	printf("\t    Spherical Hashing (SHD): %f\n",mAP_SH_SHD);
+	printf("\t    Spherical Hashing (JC): %f\n",mAP_SH_JC);
 }
 
 int main()

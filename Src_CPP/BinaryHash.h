@@ -5,15 +5,19 @@
 
 
 // hamming distance function
-__forceinline int Compute_HD(bitset<BCODE_LEN> &a, bitset<BCODE_LEN> &b)
+inline int Compute_HD(bitset<BCODE_LEN> &a, bitset<BCODE_LEN> &b)
 {
 	return ( ( a ^ b ).count() );
 }
 
 // spherical hamming distance function
-__forceinline double Compute_SHD(bitset<BCODE_LEN> &a, bitset<BCODE_LEN> &b)
+inline double Compute_SHD(bitset<BCODE_LEN> &a, bitset<BCODE_LEN> &b)
 {
 	return ( ( (double)( ( a ^ b ).count() ) ) / ( (double)( ( a & b ).count() ) + 0.1 ) );
+}
+
+inline double Compute_JC(bitset<BCODE_LEN> &a, bitset<BCODE_LEN> &b) {
+    return 1 / ((a & b).count() / ((double)(a | b).count()));
 }
 
 class LSH
@@ -36,7 +40,7 @@ public :
 		}
 	}
 
-	__forceinline void Compute_BCode(REAL_TYPE *x, bitset<BCODE_LEN> &y)
+	inline void Compute_BCode(REAL_TYPE *x, bitset<BCODE_LEN> &y)
 	{
 		REAL_TYPE tmp;
 		for(int i=0;i<BCODE_LEN;i++)
@@ -106,7 +110,7 @@ public :
 
 	void ReleaseMem();
 
-	__forceinline void Compute_BCode(REAL_TYPE *x, bitset<BCODE_LEN> &y)
+	inline void Compute_BCode(REAL_TYPE *x, bitset<BCODE_LEN> &y)
 	{
 		for(int i=0;i<BCODE_LEN;i++)
 		{
